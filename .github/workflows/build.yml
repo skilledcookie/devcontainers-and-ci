@@ -1,0 +1,30 @@
+name: Build
+
+# Run this workflow every time a new commit pushed to your repository
+on: push
+
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/vscode/devcontainers/typescript-node:0-12
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: npm install
+        name: Install npm packages
+        working-directory: app
+      
+      - run: CI=true && npm test
+        name: Test React application
+        working-directory: app
+      
+      - run: CI=true && npm run build
+        name: Build React app bundle
+        working-directory: app
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app/build
+
+

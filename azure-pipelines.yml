@@ -1,0 +1,25 @@
+pool:
+  vmImage: 'ubuntu-latest'
+
+container: "mcr.microsoft.com/vscode/devcontainers/typescript-node:0-12"
+
+steps:
+- bash: npm install
+  displayName: Install npm packages
+  workingDirectory: app
+
+- bash: npm test
+  displayName: Test React application
+  workingDirectory: app
+  env:
+    CI: true
+
+- bash: npm run build
+  displayName: Build React app bundle
+  workingDirectory: app
+  env:
+    CI: true
+
+- publish: app/build
+  artifact: app
+  displayName: Publish to Pipeline Artifacts
